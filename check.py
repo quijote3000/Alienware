@@ -2,7 +2,7 @@ import json, os, re, sys, urllib.request
 
 URL = "https://na.alienwarearena.com/"
 STATE = "seen.json"
-PATTERN = re.compile(r'/ucf/show/(\d+)/boards/[^"\'\s<>?#]*?/Giveaway/[^"\'\s<>?#]+')
+PATTERN = re.compile(r'/ucf/show/(\d+)/(?:boards/[^"\'\s<>?#]*?/)?Giveaway/[^"\'\s<>?#]+')
 
 def fetch():
     req = urllib.request.Request(URL, headers={
