@@ -10,13 +10,26 @@ def fetch():
     with urllib.request.urlopen(req, timeout=30) as r:
         return r.read().decode("utf-8", "replace")
 
-def notify(title, link):
-    topic = os.environ["NTFY_TOPIC"]
+def send(text, link, email):
+    headers = {"Title": "Alienware Arena", "Priority": "urgent", "Click": link}
+    if email:
+        headers["Email"] = email
     req = urllib.request.Request(
-        "https://ntfy.sh/" + topic,
-        data=("Nuevo giveaway: " + title).encode("utf-8"),
-        headers={"Title": "Alienware Arena", "Priority": "urgent", "Click": link})
+        "https://ntfy.sh/" + os.environ["NTFY_TOPIC"],
+        data=text.encode("utf-8"),
+        headers=headers)
     urllib.request.urlopen(req, timeout=30)
+
+def notify(title, link):
+    text = "Nuevo giveaway: " + title
+    email = os.environ.get("NTFY_EMAIL")
+    try:
+        send(text, link, email)
+    except Exception as e:
+        if not email:
+            raise
+        print("Fallo al enviar con correo, reintento solo con push:", e)
+        send(text, link, None)
 
 html = fetch()
 found = {}
