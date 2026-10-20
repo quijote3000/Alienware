@@ -16,6 +16,7 @@ jobs:
       - name: Comprobar giveaways
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_EMAIL: ${{ secrets.NTFY_EMAIL }}
         run: python check.py
       - name: Guardar estado
         run: |
